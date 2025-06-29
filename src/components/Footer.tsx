@@ -18,11 +18,11 @@ import {
 const Footer = () => {
   const quickLinks = [
     { name: 'Training Programs', href: '/programs' },
-    { name: 'Accommodation', href: '/services' },
-    { name: 'Crop Production', href: '/gallery' },
-    { name: 'Livestock', href: '/gallery' },
-    { name: 'Seminars & Events', href: '/#news' },
-    { name: 'Outreach Activities', href: '/gallery' },
+    { name: 'Services', href: '/services' },
+    { name: 'Crop Production', href: '/crop-production' },
+    { name: 'Livestock Production', href: '/livestock-production' },
+    { name: 'Catering Services', href: '/catering' },
+    { name: 'Outreach Programs', href: '/outreach' },
   ];
 
   const resources = [
@@ -31,7 +31,7 @@ const Footer = () => {
     { name: 'Training Manuals', href: '/resources' },
     { name: 'Research Publications', href: '/resources' },
     { name: 'Photo Gallery', href: '/gallery' },
-    { name: 'Video Resources', href: '/resources' },
+    { name: 'News & Events', href: '/news-events' },
   ];
 
   const legalLinks = [
