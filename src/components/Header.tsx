@@ -10,13 +10,14 @@ const Header = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const navigationItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'About Us', href: '#about' },
-    { name: 'Training Programs', href: '#programs' },
-    { name: 'Services', href: '#services' },
-    { name: 'News & Events', href: '#news' },
-    { name: 'Resources', href: '#resources' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: '/' },
+    { name: 'About Us', href: '/about' },
+    { name: 'Training Programs', href: '/programs' },
+    { name: 'Services', href: '/services' },
+    { name: 'News & Events', href: '/#news' },
+    { name: 'Gallery', href: '/gallery' },
+    { name: 'Resources', href: '/resources' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   return (
@@ -44,7 +45,7 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           {/* Logo and branding */}
-          <div className="flex items-center space-x-4">
+          <Link to="/" className="flex items-center space-x-4">
             <div className="w-16 h-16 bg-agricultural-green rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-xl">MAC</span>
             </div>
@@ -54,18 +55,18 @@ const Header = () => {
               </h1>
               <p className="text-sm text-gray-600">Department of Agriculture - Migori County</p>
             </div>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-6">
             {navigationItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.href}
                 className="text-gray-700 hover:text-agricultural-green transition-colors duration-200 font-medium"
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -85,14 +86,14 @@ const Header = () => {
           <nav className="lg:hidden mt-4 pb-4 border-t border-gray-200">
             <div className="flex flex-col space-y-2 pt-4">
               {navigationItems.map((item) => (
-                <a
+                <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.href}
                   className="text-gray-700 hover:text-agricultural-green transition-colors duration-200 py-2 px-4 rounded-md hover:bg-gray-50"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
-                </a>
+                </Link>
               ))}
             </div>
           </nav>

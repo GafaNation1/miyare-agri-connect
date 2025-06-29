@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { Link } from 'react-router-dom';
 import { 
   Facebook, 
   Twitter, 
@@ -16,29 +17,44 @@ import {
 
 const Footer = () => {
   const quickLinks = [
-    { name: 'Training Programs', href: '#programs' },
-    { name: 'Accommodation', href: '#accommodation' },
-    { name: 'Crop Production', href: '#crops' },
-    { name: 'Livestock', href: '#livestock' },
-    { name: 'Seminars & Events', href: '#seminars' },
-    { name: 'Outreach Activities', href: '#outreach' },
+    { name: 'Training Programs', href: '/programs' },
+    { name: 'Accommodation', href: '/services' },
+    { name: 'Crop Production', href: '/gallery' },
+    { name: 'Livestock', href: '/gallery' },
+    { name: 'Seminars & Events', href: '/#news' },
+    { name: 'Outreach Activities', href: '/gallery' },
   ];
 
   const resources = [
-    { name: 'Course Brochures', href: '#downloads' },
-    { name: 'Application Forms', href: '#forms' },
-    { name: 'Training Manuals', href: '#manuals' },
-    { name: 'Research Publications', href: '#research' },
-    { name: 'Photo Gallery', href: '#gallery' },
-    { name: 'Video Resources', href: '#videos' },
+    { name: 'Course Brochures', href: '/resources' },
+    { name: 'Application Forms', href: '/resources' },
+    { name: 'Training Manuals', href: '/resources' },
+    { name: 'Research Publications', href: '/resources' },
+    { name: 'Photo Gallery', href: '/gallery' },
+    { name: 'Video Resources', href: '/resources' },
   ];
 
   const legalLinks = [
-    { name: 'Terms of Use', href: '#terms' },
-    { name: 'Privacy Policy', href: '#privacy' },
-    { name: 'Accessibility Statement', href: '#accessibility' },
-    { name: 'Cookie Policy', href: '#cookies' },
+    { name: 'Terms of Use', href: '/terms' },
+    { name: 'Privacy Policy', href: '/privacy' },
+    { name: 'Accessibility Statement', href: '/accessibility' },
+    { name: 'Cookie Policy', href: '/cookies' },
   ];
+
+  const handleSocialClick = (platform: string) => {
+    const socialLinks = {
+      facebook: 'https://facebook.com/MiyareATC',
+      twitter: 'https://twitter.com/MiyareATC',
+      instagram: 'https://instagram.com/MiyareATC',
+      youtube: 'https://youtube.com/@MiyareATC'
+    };
+    window.open(socialLinks[platform as keyof typeof socialLinks], '_blank');
+  };
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    window.open('https://forms.google.com/d/e/1FAIpQLSc_newsletter_signup', '_blank');
+  };
 
   return (
     <footer className="bg-gray-900 text-white">
@@ -50,16 +66,17 @@ const Footer = () => {
             <p className="text-green-100 mb-6">
               Subscribe to receive the latest updates on training programs, agricultural innovations, and county developments
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
               <Input 
                 type="email" 
                 placeholder="Enter your email address"
                 className="bg-white text-gray-900 flex-1"
+                required
               />
-              <Button className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
+              <Button type="submit" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
                 Subscribe
               </Button>
-            </div>
+            </form>
           </div>
         </div>
       </div>
@@ -84,10 +101,22 @@ const Footer = () => {
                 sustainable practices, and community empowerment.
               </p>
               <div className="flex space-x-4">
-                <Facebook className="h-5 w-5 text-gray-400 hover:text-blue-500 cursor-pointer transition-colors" />
-                <Twitter className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" />
-                <Instagram className="h-5 w-5 text-gray-400 hover:text-pink-500 cursor-pointer transition-colors" />
-                <Youtube className="h-5 w-5 text-gray-400 hover:text-red-500 cursor-pointer transition-colors" />
+                <Facebook 
+                  className="h-5 w-5 text-gray-400 hover:text-blue-500 cursor-pointer transition-colors" 
+                  onClick={() => handleSocialClick('facebook')}
+                />
+                <Twitter 
+                  className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors"
+                  onClick={() => handleSocialClick('twitter')}
+                />
+                <Instagram 
+                  className="h-5 w-5 text-gray-400 hover:text-pink-500 cursor-pointer transition-colors"
+                  onClick={() => handleSocialClick('instagram')}
+                />
+                <Youtube 
+                  className="h-5 w-5 text-gray-400 hover:text-red-500 cursor-pointer transition-colors"
+                  onClick={() => handleSocialClick('youtube')}
+                />
               </div>
             </div>
 
@@ -97,12 +126,12 @@ const Footer = () => {
               <ul className="space-y-3">
                 {quickLinks.map((link) => (
                   <li key={link.name}>
-                    <a 
-                      href={link.href}
+                    <Link 
+                      to={link.href}
                       className="text-gray-300 hover:text-agricultural-green transition-colors text-sm"
                     >
                       {link.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -114,13 +143,13 @@ const Footer = () => {
               <ul className="space-y-3">
                 {resources.map((resource) => (
                   <li key={resource.name}>
-                    <a 
-                      href={resource.href}
+                    <Link 
+                      to={resource.href}
                       className="text-gray-300 hover:text-agricultural-green transition-colors text-sm flex items-center"
                     >
                       {resource.name}
                       <ExternalLink className="h-3 w-3 ml-1" />
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -178,9 +207,9 @@ const Footer = () => {
             <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 text-xs text-gray-400">
               {legalLinks.map((link, index) => (
                 <React.Fragment key={link.name}>
-                  <a href={link.href} className="hover:text-agricultural-green transition-colors">
+                  <Link to={link.href} className="hover:text-agricultural-green transition-colors">
                     {link.name}
-                  </a>
+                  </Link>
                   {index < legalLinks.length - 1 && <span>•</span>}
                 </React.Fragment>
               ))}

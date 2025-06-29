@@ -3,7 +3,8 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, MapPin, Users } from 'lucide-react';
+import { Calendar, Clock, MapPin, Users, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const NewsAndEvents = () => {
   const upcomingEvents = [
@@ -63,6 +64,10 @@ const NewsAndEvents = () => {
     }
   ];
 
+  const handleRegistration = () => {
+    window.open('https://forms.google.com/d/e/1FAIpQLSc_event_registration_form', '_blank');
+  };
+
   return (
     <section id="news" className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -110,8 +115,11 @@ const NewsAndEvents = () => {
                         {event.participants} seats
                       </div>
                     </div>
-                    <Button className="w-full bg-agricultural-green hover:bg-green-700">
-                      Register Now
+                    <Button 
+                      className="w-full bg-agricultural-green hover:bg-green-700"
+                      onClick={handleRegistration}
+                    >
+                      Register Now <ExternalLink className="h-4 w-4 ml-2" />
                     </Button>
                   </CardContent>
                 </Card>
@@ -134,9 +142,11 @@ const NewsAndEvents = () => {
                       {news.title}
                     </h4>
                     <p className="text-gray-600 mb-4">{news.excerpt}</p>
-                    <Button variant="outline" size="sm">
-                      Read More
-                    </Button>
+                    <Link to={`/news/${news.id}`}>
+                      <Button variant="outline" size="sm">
+                        Read More
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               ))}
