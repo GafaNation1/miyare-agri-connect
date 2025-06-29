@@ -1,11 +1,10 @@
-
 import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Leaf, Sprout, Sun, Droplets, BarChart3, Users, BookOpen, Award } from 'lucide-react';
+import { Leaf, Sprout, Sun, Droplets, BarChart3, Users, BookOpen, Award, MapPin, Phone } from 'lucide-react';
 
 const CropProduction = () => {
   const cropPrograms = [
@@ -14,24 +13,27 @@ const CropProduction = () => {
       duration: "3 months",
       level: "Beginner to Advanced",
       image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      description: "Comprehensive training on modern maize farming techniques, from land preparation to harvest.",
-      modules: ["Soil preparation", "Seed selection", "Planting techniques", "Pest management", "Harvesting & storage"]
+      description: "Comprehensive training on modern maize farming techniques covering hybrid seed selection, proper spacing, fertilizer application, pest and disease management, and post-harvest handling.",
+      modules: ["Soil preparation & testing", "Hybrid seed selection", "Precision planting techniques", "Integrated pest management", "Harvesting & storage methods"],
+      activities: ["Field demonstrations", "Hands-on planting", "Soil testing workshops", "Pest identification training", "Storage facility tours"]
     },
     {
       title: "Sustainable Vegetable Farming",
       duration: "2 months",
       level: "All levels",
       image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      description: "Learn organic vegetable production methods for maximum yield and market value.",
-      modules: ["Organic soil management", "Companion planting", "Natural pest control", "Irrigation systems", "Market preparation"]
+      description: "Learn organic vegetable production methods including greenhouse farming, drip irrigation, companion planting, and natural pest control for maximum yield and market value.",
+      modules: ["Organic soil management", "Greenhouse operations", "Drip irrigation systems", "Natural pest control", "Market preparation & packaging"],
+      activities: ["Greenhouse tours", "Compost making", "Irrigation setup", "Harvest demonstrations", "Market visits"]
     },
     {
       title: "Cash Crop Development",
       duration: "4 months",
       level: "Intermediate",
-      image: "https://images.unsplash.com/photo-1560493676-04071c5f467b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      description: "Focus on high-value crops like coffee, tea, and horticultural products for commercial farming.",
-      modules: ["Market analysis", "Crop selection", "Quality control", "Processing basics", "Export standards"]
+      image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      description: "Focus on high-value crops like coffee, tea, avocados, and horticultural products for commercial farming with emphasis on quality standards and export requirements.",
+      modules: ["Market analysis & planning", "Crop selection & variety", "Quality control systems", "Processing basics", "Export standards & certification"],
+      activities: ["Coffee plantation visits", "Tea processing demos", "Quality testing labs", "Export facility tours", "Buyer meetings"]
     }
   ];
 
@@ -82,20 +84,38 @@ const CropProduction = () => {
     }
   ];
 
+  const dailyActivities = [
+    "6:00 AM - Morning field inspection and data collection",
+    "8:00 AM - Practical farming demonstrations",
+    "10:00 AM - Classroom theory sessions",
+    "2:00 PM - Hands-on training in demo plots",
+    "4:00 PM - Equipment maintenance and storage",
+    "5:00 PM - Record keeping and planning next day activities"
+  ];
+
   const handleRegistration = () => {
     window.open('https://forms.google.com/d/e/1FAIpQLSc_crop_production_registration', '_blank');
+  };
+
+  const handleVisitFarm = () => {
+    window.open('/gallery', '_self');
   };
 
   return (
     <div className="min-h-screen bg-white">
       <Header />
       <main>
-        {/* Hero Section */}
-        <section className="bg-gradient-to-r from-green-600 to-agricultural-green py-20">
+        {/* Hero Section with proper crop background */}
+        <section 
+          className="relative py-20 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1574943320219-553eb213f72d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')`
+          }}
+        >
           <div className="container mx-auto px-4">
             <div className="text-center text-white">
               <h1 className="text-4xl md:text-6xl font-bold mb-6">Crop Production Excellence</h1>
-              <p className="text-xl text-green-100 max-w-3xl mx-auto mb-8">
+              <p className="text-xl text-white max-w-3xl mx-auto mb-8">
                 Master modern crop production techniques through hands-on training, 
                 demonstration farms, and expert guidance at Miyare Agricultural Training Center.
               </p>
@@ -105,11 +125,83 @@ const CropProduction = () => {
                   className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold"
                   onClick={handleRegistration}
                 >
+                  <BookOpen className="h-5 w-5 mr-2" />
                   Enroll in Programs
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-agricultural-green">
+                <Button 
+                  size="lg" 
+                  className="bg-agricultural-green hover:bg-green-700 text-white"
+                  onClick={handleVisitFarm}
+                >
+                  <MapPin className="h-5 w-5 mr-2" />
                   View Demo Farms
                 </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* What We Do Section */}
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                What We Do in Crop Production
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Our comprehensive crop production program covers everything from soil preparation to post-harvest handling, 
+                ensuring farmers get maximum yields and profits from their agricultural activities.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <Leaf className="h-12 w-12 text-agricultural-green mb-4" />
+                  <h3 className="text-xl font-semibold mb-3">Field Preparation</h3>
+                  <p className="text-gray-600">Land clearing, soil testing, fertilizer application, and optimal field layout planning for maximum productivity.</p>
+                </CardContent>
+              </Card>
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <Sprout className="h-12 w-12 text-agricultural-green mb-4" />
+                  <h3 className="text-xl font-semibold mb-3">Planting & Cultivation</h3>
+                  <p className="text-gray-600">Proper seeding techniques, spacing, intercropping, and cultivation practices for healthy crop development.</p>
+                </CardContent>
+              </Card>
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <BarChart3 className="h-12 w-12 text-agricultural-green mb-4" />
+                  <h3 className="text-xl font-semibold mb-3">Yield Optimization</h3>
+                  <p className="text-gray-600">Advanced techniques for maximizing crop yields through proper nutrition, pest management, and harvest timing.</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="bg-gray-50 rounded-lg p-8">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Daily Training Activities</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="text-lg font-semibold text-agricultural-green mb-4">Typical Training Day Schedule</h4>
+                  <ul className="space-y-2">
+                    {dailyActivities.map((activity, index) => (
+                      <li key={index} className="flex items-start text-gray-700">
+                        <div className="w-2 h-2 bg-agricultural-green rounded-full mr-3 mt-2 flex-shrink-0"></div>
+                        {activity}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="bg-white rounded-lg p-6">
+                  <h4 className="text-lg font-semibold text-agricultural-green mb-4">Training Outcomes</h4>
+                  <ul className="space-y-3">
+                    <li className="text-gray-700">✓ 40% average increase in crop yields</li>
+                    <li className="text-gray-700">✓ Reduced production costs by 25%</li>
+                    <li className="text-gray-700">✓ Improved crop quality and market value</li>
+                    <li className="text-gray-700">✓ Sustainable farming practices adoption</li>
+                    <li className="text-gray-700">✓ Enhanced post-harvest handling skills</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -290,6 +382,7 @@ const CropProduction = () => {
                   className="border-white text-white hover:bg-white hover:text-agricultural-green"
                   onClick={() => window.open('tel:+254XXXXXXXXX')}
                 >
+                  <Phone className="h-5 w-5 mr-2" />
                   Call for Consultation
                 </Button>
               </div>

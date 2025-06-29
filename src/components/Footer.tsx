@@ -26,10 +26,10 @@ const Footer = () => {
   ];
 
   const resources = [
-    { name: 'Course Brochures', href: '/resources' },
-    { name: 'Application Forms', href: '/resources' },
-    { name: 'Training Manuals', href: '/resources' },
-    { name: 'Research Publications', href: '/resources' },
+    { name: 'Course Brochures', href: '/resources#brochures' },
+    { name: 'Application Forms', href: '/resources#forms' },
+    { name: 'Training Manuals', href: '/resources#manuals' },
+    { name: 'Research Publications', href: '/resources#research' },
     { name: 'Photo Gallery', href: '/gallery' },
     { name: 'News & Events', href: '/news-events' },
   ];
@@ -165,6 +165,9 @@ const Footer = () => {
                     <p>Miyare Agricultural Training Center</p>
                     <p>P.O. Box 123, Migori</p>
                     <p>Migori County, Kenya</p>
+                    <Link to="/map" className="text-agricultural-green hover:underline">
+                      View on Map
+                    </Link>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">

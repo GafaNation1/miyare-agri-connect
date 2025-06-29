@@ -18,6 +18,11 @@ import LivestockProduction from "./pages/LivestockProduction";
 import Catering from "./pages/Catering";
 import Outreach from "./pages/Outreach";
 import Administration from "./pages/Administration";
+import TermsOfUse from "./pages/TermsOfUse";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import AccessibilityStatement from "./pages/AccessibilityStatement";
+import CookiePolicy from "./pages/CookiePolicy";
+import MapView from "./pages/MapView";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +48,11 @@ const App = () => (
           <Route path="/news-events" element={<NewsEvents />} />
           <Route path="/news/:id" element={<NewsArticle />} />
           <Route path="/administration" element={<Administration />} />
+          <Route path="/terms" element={<TermsOfUse />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/accessibility" element={<AccessibilityStatement />} />
+          <Route path="/cookies" element={<CookiePolicy />} />
+          <Route path="/map" element={<MapView />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
