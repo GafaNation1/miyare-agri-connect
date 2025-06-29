@@ -1,11 +1,10 @@
-
 import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Cow, Rabbit, Egg, Sheep, Heart, TrendingUp, Users, Award } from 'lucide-react';
+import { Beef, Rabbit, Egg, PawPrint, Heart, TrendingUp, Users, Award } from 'lucide-react';
 
 const LivestockProduction = () => {
   const livestockPrograms = [
@@ -86,7 +85,7 @@ const LivestockProduction = () => {
       description: "Artificial insemination services and genetic improvement programs for better livestock."
     },
     {
-      icon: Cow,
+      icon: Beef,
       title: "Livestock Supply",
       description: "Quality breeding stock and day-old chicks from certified sources."
     },
@@ -136,7 +135,7 @@ const LivestockProduction = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {[
                 { icon: Users, number: "1,800+", label: "Farmers Trained" },
-                { icon: Cow, number: "300+", label: "Livestock Units" },
+                { icon: Beef, number: "300+", label: "Livestock Units" },
                 { icon: TrendingUp, number: "60%", label: "Productivity Increase" },
                 { icon: Award, number: "20+", label: "Years Excellence" }
               ].map((stat, index) => (
