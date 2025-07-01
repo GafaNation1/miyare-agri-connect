@@ -1,10 +1,10 @@
-
 import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import BookingForm from '@/components/BookingForm';
 import { Bed, Wifi, Car, Utensils, Tv, Coffee, Shield, Clock } from 'lucide-react';
 
 const Accommodation = () => {
@@ -96,9 +96,11 @@ const Accommodation = () => {
               <p className="text-xl text-green-100 mb-8">
                 Experience comfortable and affordable lodging at Miyare Agricultural Training Center. Our accommodation facilities are designed to provide a conducive environment for learning and rest.
               </p>
-              <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
-                Book Your Stay
-              </Button>
+              <BookingForm roomType="Any Available Room" roomPrice="Starting from KSh 2,000">
+                <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
+                  Book Your Stay
+                </Button>
+              </BookingForm>
             </div>
           </div>
         </section>
@@ -146,9 +148,11 @@ const Accommodation = () => {
                       </ul>
                     </div>
 
-                    <Button className="w-full bg-agricultural-green hover:bg-green-700">
-                      Reserve Now
-                    </Button>
+                    <BookingForm roomType={option.title} roomPrice={option.price}>
+                      <Button className="w-full bg-agricultural-green hover:bg-green-700">
+                        Reserve Now
+                      </Button>
+                    </BookingForm>
                   </CardContent>
                 </Card>
               ))}
@@ -236,9 +240,11 @@ const Accommodation = () => {
                       Phone: +254 XXX XXX XXX<br />
                       Email: accommodation@miyareagri.migori.go.ke
                     </p>
-                    <Button size="lg" className="bg-agricultural-green hover:bg-green-700">
-                      Make Reservation
-                    </Button>
+                    <BookingForm roomType="Preferred Room" roomPrice="Contact for pricing">
+                      <Button size="lg" className="bg-agricultural-green hover:bg-green-700">
+                        Make Reservation
+                      </Button>
+                    </BookingForm>
                   </div>
                 </CardContent>
               </Card>
@@ -257,9 +263,11 @@ const Accommodation = () => {
                 Experience comfortable accommodation while attending our agricultural training programs. Book now to secure your preferred dates.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
-                  Book Now
-                </Button>
+                <BookingForm roomType="Any Available Room" roomPrice="Best Available Rate">
+                  <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
+                    Book Now
+                  </Button>
+                </BookingForm>
                 <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-agricultural-green">
                   Contact Us
                 </Button>

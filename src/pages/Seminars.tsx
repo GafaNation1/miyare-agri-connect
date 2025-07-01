@@ -1,10 +1,10 @@
-
 import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import SeminarRegistrationForm from '@/components/SeminarRegistrationForm';
 import { Calendar, Clock, MapPin, Users, BookOpen, Award, TrendingUp } from 'lucide-react';
 
 const Seminars = () => {
@@ -86,9 +86,11 @@ const Seminars = () => {
               <p className="text-xl text-green-100 mb-8">
                 Join our comprehensive educational seminars designed to enhance your agricultural knowledge and skills through expert-led sessions and hands-on learning experiences.
               </p>
-              <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
-                Register for Seminars
-              </Button>
+              <SeminarRegistrationForm seminarTitle="Next Available Seminar" seminarDate="Contact for dates">
+                <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
+                  Register for Seminars
+                </Button>
+              </SeminarRegistrationForm>
             </div>
           </div>
         </section>
@@ -171,9 +173,11 @@ const Seminars = () => {
                       </div>
                     </div>
 
-                    <Button className="w-full bg-agricultural-green hover:bg-green-700">
-                      Register Now
-                    </Button>
+                    <SeminarRegistrationForm seminarTitle={seminar.title} seminarDate={seminar.date}>
+                      <Button className="w-full bg-agricultural-green hover:bg-green-700">
+                        Register Now
+                      </Button>
+                    </SeminarRegistrationForm>
                   </CardContent>
                 </Card>
               ))}
@@ -232,9 +236,11 @@ const Seminars = () => {
                 Join our upcoming seminars and workshops to learn from agricultural experts and connect with fellow farmers.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
-                  View All Seminars
-                </Button>
+                <SeminarRegistrationForm seminarTitle="All Available Seminars" seminarDate="Various dates">
+                  <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
+                    View All Seminars
+                  </Button>
+                </SeminarRegistrationForm>
                 <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-agricultural-green">
                   Contact Us
                 </Button>
