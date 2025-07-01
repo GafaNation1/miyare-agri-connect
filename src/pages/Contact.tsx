@@ -1,21 +1,92 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { MapPin, Phone, Mail, Clock, MessageSquare } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, MessageSquare, Send } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    window.open('https://forms.google.com/d/e/1FAIpQLSc_contact_form_link', '_blank');
+    setIsSubmitting(true);
+
+    try {
+      // EmailJS configuration - replace with your actual service details
+      const serviceId = 'your_service_id'; // Replace with your EmailJS service ID
+      const templateId = 'your_template_id'; // Replace with your EmailJS template ID
+      const publicKey = 'your_public_key'; // Replace with your EmailJS public key
+
+      const templateParams = {
+        from_name: `${formData.firstName} ${formData.lastName}`,
+        from_email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+        to_email: 'info@miyareagri.migori.go.ke'
+      };
+
+      // Try to send via EmailJS first
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      
+      toast({
+        title: "Message Sent Successfully!",
+        description: "Thank you for contacting us. We'll get back to you within 24 hours.",
+      });
+
+      // Clear form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      });
+
+    } catch (error) {
+      console.error('EmailJS failed:', error);
+      
+      // Fallback to Google Forms
+      const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSc_contact_form_miyare_agri/formResponse';
+      
+      toast({
+        title: "Redirecting to Contact Form",
+        description: "Opening our contact form in a new tab for you to submit your inquiry.",
+      });
+      
+      window.open(googleFormUrl, '_blank');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleWhatsApp = () => {
-    window.open('https://wa.me/254XXXXXXXXX', '_blank');
+    const message = encodeURIComponent('Hello! I would like to inquire about Miyare Agricultural Training Center services.');
+    window.open(`https://wa.me/254700000000?text=${message}`, '_blank');
   };
 
   return (
@@ -77,9 +148,9 @@ const Contact = () => {
                         <div>
                           <h3 className="font-semibold text-gray-900 mb-2">Phone Numbers</h3>
                           <p className="text-gray-600">
-                            Main Office: +254 XXX XXX XXX<br />
-                            Director: +254 XXX XXX XXX<br />
-                            Emergency: +254 XXX XXX XXX
+                            Main Office: +254 700 000 000<br />
+                            Director: +254 701 000 000<br />
+                            Emergency: +254 702 000 000
                           </p>
                         </div>
                       </div>
@@ -137,6 +208,9 @@ const Contact = () => {
                 <Card>
                   <CardHeader>
                     <CardTitle>Send us a Message</CardTitle>
+                    <p className="text-sm text-gray-600">
+                      Fill out the form below and we'll get back to you within 24 hours.
+                    </p>
                   </CardHeader>
                   <CardContent>
                     <form onSubmit={handleFormSubmit} className="space-y-6">
@@ -145,13 +219,25 @@ const Contact = () => {
                           <label className="block text-sm font-medium text-gray-700 mb-2">
                             First Name *
                           </label>
-                          <Input placeholder="Enter your first name" required />
+                          <Input 
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleInputChange}
+                            placeholder="Enter your first name" 
+                            required 
+                          />
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
                             Last Name *
                           </label>
-                          <Input placeholder="Enter your last name" required />
+                          <Input 
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleInputChange}
+                            placeholder="Enter your last name" 
+                            required 
+                          />
                         </div>
                       </div>
                       
@@ -159,21 +245,39 @@ const Contact = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Email Address *
                         </label>
-                        <Input type="email" placeholder="Enter your email address" required />
+                        <Input 
+                          type="email" 
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          placeholder="Enter your email address" 
+                          required 
+                        />
                       </div>
                       
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Phone Number
                         </label>
-                        <Input placeholder="Enter your phone number" />
+                        <Input 
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          placeholder="Enter your phone number" 
+                        />
                       </div>
                       
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Subject *
                         </label>
-                        <Input placeholder="What is this regarding?" required />
+                        <Input 
+                          name="subject"
+                          value={formData.subject}
+                          onChange={handleInputChange}
+                          placeholder="What is this regarding?" 
+                          required 
+                        />
                       </div>
                       
                       <div>
@@ -181,14 +285,31 @@ const Contact = () => {
                           Message *
                         </label>
                         <Textarea 
+                          name="message"
+                          value={formData.message}
+                          onChange={handleInputChange}
                           placeholder="Please provide details about your inquiry..."
                           rows={6}
                           required
                         />
                       </div>
                       
-                      <Button type="submit" className="w-full bg-agricultural-green hover:bg-green-700">
-                        Send Message
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-agricultural-green hover:bg-green-700"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <Send className="h-4 w-4 mr-2" />
+                            Send Message
+                          </>
+                        )}
                       </Button>
                     </form>
                   </CardContent>
@@ -223,7 +344,7 @@ const Contact = () => {
                 <Button 
                   size="lg"
                   className="bg-agricultural-green hover:bg-green-700"
-                  onClick={() => window.open('https://maps.google.com/directions', '_blank')}
+                  onClick={() => window.open('https://maps.google.com/directions/34.4732,-1.0632', '_blank')}
                 >
                   <MapPin className="h-5 w-5 mr-2" />
                   Get Directions
