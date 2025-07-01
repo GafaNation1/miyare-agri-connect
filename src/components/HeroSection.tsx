@@ -3,13 +3,14 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Users, BookOpen, Leaf, Home } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   const quickLinks = [
-    { icon: BookOpen, title: 'Training Programs', desc: 'Agricultural courses & certifications', href: '#programs' },
-    { icon: Home, title: 'Accommodation', desc: 'Comfortable lodging facilities', href: '#accommodation' },
-    { icon: Leaf, title: 'Crop Production', desc: 'Sustainable farming practices', href: '#crops' },
-    { icon: Users, title: 'Seminars', desc: 'Educational workshops & events', href: '#seminars' },
+    { icon: BookOpen, title: 'Training Programs', desc: 'Agricultural courses & certifications', href: '/programs' },
+    { icon: Home, title: 'Accommodation', desc: 'Comfortable lodging facilities', href: '/accommodation' },
+    { icon: Leaf, title: 'Crop Production', desc: 'Sustainable farming practices', href: '/crop-production' },
+    { icon: Users, title: 'Seminars', desc: 'Educational workshops & events', href: '/seminars' },
   ];
 
   return (
@@ -30,11 +31,11 @@ const HeroSection = () => {
               sustainable practices, and community outreach programs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
-                Explore Programs
+              <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold" asChild>
+                <Link to="/programs">Explore Programs</Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-agricultural-green">
-                Register Now
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-agricultural-green" asChild>
+                <Link to="/contact">Register Now</Link>
               </Button>
             </div>
           </div>
@@ -52,8 +53,8 @@ const HeroSection = () => {
                 </div>
                 <h3 className="text-lg font-semibold mb-2 text-gray-900">{link.title}</h3>
                 <p className="text-gray-600 text-sm mb-4">{link.desc}</p>
-                <Button variant="outline" size="sm" className="w-full">
-                  Learn More
+                <Button variant="outline" size="sm" className="w-full" asChild>
+                  <Link to={link.href}>Learn More</Link>
                 </Button>
               </CardContent>
             </Card>

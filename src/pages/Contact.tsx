@@ -198,24 +198,37 @@ const Contact = () => {
           </div>
         </section>
 
-        {/* Map Section */}
+        {/* Live Map Section */}
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Find Us</h2>
-            <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Find Us on the Map</h2>
+            <div className="max-w-6xl mx-auto">
               <Card>
-                <CardContent className="p-6">
-                  <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-                    <div className="text-center">
-                      <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-600">
-                        Interactive map will be embedded here<br />
-                        Location: Miyare Agricultural Training Center, Migori County
-                      </p>
-                    </div>
+                <CardContent className="p-0">
+                  <div className="h-96 lg:h-[500px] rounded-lg overflow-hidden">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.6089469574247!2d34.4732!3d-1.0632!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMDMnNDcuNSJTIDM0wrAyOCcyMy41IkU!5e0!3m2!1sen!2ske!4v1234567890"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Miyare Agricultural Training Center Location"
+                    ></iframe>
                   </div>
                 </CardContent>
               </Card>
+              <div className="text-center mt-6">
+                <Button 
+                  size="lg"
+                  className="bg-agricultural-green hover:bg-green-700"
+                  onClick={() => window.open('https://maps.google.com/directions', '_blank')}
+                >
+                  <MapPin className="h-5 w-5 mr-2" />
+                  Get Directions
+                </Button>
+              </div>
             </div>
           </div>
         </section>
