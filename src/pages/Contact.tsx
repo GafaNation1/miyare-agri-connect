@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { MapPin, Phone, Mail, Clock, MessageSquare, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const { toast } = useToast();
@@ -35,50 +34,49 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // EmailJS configuration - replace with your actual service details
-      const serviceId = 'your_service_id'; // Replace with your EmailJS service ID
-      const templateId = 'your_template_id'; // Replace with your EmailJS template ID
-      const publicKey = 'your_public_key'; // Replace with your EmailJS public key
+      const formDataToSend = new FormData();
+      formDataToSend.append('firstName', formData.firstName);
+      formDataToSend.append('lastName', formData.lastName);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('phone', formData.phone);
+      formDataToSend.append('subject', formData.subject);
+      formDataToSend.append('message', formData.message);
+      formDataToSend.append('fullName', `${formData.firstName} ${formData.lastName}`);
 
-      const templateParams = {
-        from_name: `${formData.firstName} ${formData.lastName}`,
-        from_email: formData.email,
-        phone: formData.phone,
-        subject: formData.subject,
-        message: formData.message,
-        to_email: 'info@miyareagri.migori.go.ke'
-      };
-
-      // Try to send via EmailJS first
-      await emailjs.send(serviceId, templateId, templateParams, publicKey);
-      
-      toast({
-        title: "Message Sent Successfully!",
-        description: "Thank you for contacting us. We'll get back to you within 24 hours.",
+      const response = await fetch('https://formspree.io/f/xanjvaza', {
+        method: 'POST',
+        body: formDataToSend,
+        headers: {
+          'Accept': 'application/json'
+        }
       });
 
-      // Clear form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
-      });
+      if (response.ok) {
+        toast({
+          title: "Message Sent Successfully!",
+          description: "Thank you for contacting us. We'll get back to you within 24 hours.",
+        });
+
+        // Clear form
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      } else {
+        throw new Error('Form submission failed');
+      }
 
     } catch (error) {
-      console.error('EmailJS failed:', error);
-      
-      // Fallback to Google Forms
-      const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSc_contact_form_miyare_agri/formResponse';
-      
+      console.error('Form submission error:', error);
       toast({
-        title: "Redirecting to Contact Form",
-        description: "Opening our contact form in a new tab for you to submit your inquiry.",
+        title: "Submission Failed",
+        description: "There was an error sending your message. Please try again or contact us directly.",
+        variant: "destructive"
       });
-      
-      window.open(googleFormUrl, '_blank');
     } finally {
       setIsSubmitting(false);
     }
