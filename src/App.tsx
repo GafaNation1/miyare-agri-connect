@@ -17,6 +17,8 @@ import CropProduction from "./pages/CropProduction";
 import LivestockProduction from "./pages/LivestockProduction";
 import Catering from "./pages/Catering";
 import Outreach from "./pages/Outreach";
+import Seminars from "./pages/Seminars";
+import Accommodation from "./pages/Accommodation";
 import Administration from "./pages/Administration";
 import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
