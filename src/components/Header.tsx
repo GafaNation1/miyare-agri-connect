@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Phone, Mail, ChevronDown, MoreHorizontal, LogIn, UserPlus } from 'lucide-react';
+import { Menu, X, Phone, Mail, ChevronDown, MoreHorizontal, LogIn, UserPlus, LogOut, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
   DropdownMenu,
@@ -13,11 +13,18 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout, isAuthenticated } = useAuth();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const handleLogout = () => {
+    logout();
+    setIsMenuOpen(false);
+  };
 
   const navigationItems = [
     { name: 'Home', href: '/' },
@@ -58,30 +65,47 @@ const Header = () => {
             </div>
           </div>
           
-          {/* Auth buttons */}
+          {/* Auth buttons or user info */}
           <div className="flex items-center space-x-2">
             <span className="hidden lg:block text-xs">Department of Agriculture - Migori County Government</span>
             <div className="flex items-center space-x-1 md:space-x-2 ml-2 md:ml-4">
-              <Link to="/login">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="text-white hover:bg-white/10 text-xs md:text-sm h-6 md:h-8 px-2 md:px-3"
-                >
-                  <LogIn className="h-3 w-3 md:h-4 md:w-4 mr-1" />
-                  Login
-                </Button>
-              </Link>
-              <Link to="/signup">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="text-white hover:bg-white/10 text-xs md:text-sm h-6 md:h-8 px-2 md:px-3"
-                >
-                  <UserPlus className="h-3 w-3 md:h-4 md:w-4 mr-1" />
-                  Sign Up
-                </Button>
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <span className="hidden md:inline text-xs">Welcome, {user?.firstName}</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 text-xs md:text-sm h-6 md:h-8 px-2 md:px-3"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="h-3 w-3 md:h-4 md:w-4 mr-1" />
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-white hover:bg-white/10 text-xs md:text-sm h-6 md:h-8 px-2 md:px-3"
+                    >
+                      <LogIn className="h-3 w-3 md:h-4 md:w-4 mr-1" />
+                      Login
+                    </Button>
+                  </Link>
+                  <Link to="/signup">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-white hover:bg-white/10 text-xs md:text-sm h-6 md:h-8 px-2 md:px-3"
+                    >
+                      <UserPlus className="h-3 w-3 md:h-4 md:w-4 mr-1" />
+                      Sign Up
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -140,18 +164,33 @@ const Header = () => {
                   </React.Fragment>
                 ))}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link to="/login" className="cursor-pointer flex items-center">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Login
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/signup" className="cursor-pointer flex items-center">
-                    <UserPlus className="h-4 w-4 mr-2" />
-                    Sign Up
-                  </Link>
-                </DropdownMenuItem>
+                {isAuthenticated ? (
+                  <>
+                    <DropdownMenuItem className="cursor-pointer flex items-center">
+                      <User className="h-4 w-4 mr-2" />
+                      {user?.firstName} {user?.lastName}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer flex items-center">
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/login" className="cursor-pointer flex items-center">
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Login
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/signup" className="cursor-pointer flex items-center">
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        Sign Up
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -199,22 +238,40 @@ const Header = () => {
               
               {/* Mobile Auth Links */}
               <div className="border-t border-gray-200 pt-2 mt-2">
-                <Link
-                  to="/login"
-                  className="text-government-blue hover:text-agricultural-green transition-colors duration-200 py-1 md:py-2 px-2 md:px-4 rounded-md hover:bg-gray-50 block text-sm md:text-base flex items-center"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Login
-                </Link>
-                <Link
-                  to="/signup"
-                  className="text-government-blue hover:text-agricultural-green transition-colors duration-200 py-1 md:py-2 px-2 md:px-4 rounded-md hover:bg-gray-50 block text-sm md:text-base flex items-center"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <UserPlus className="h-4 w-4 mr-2" />
-                  Sign Up
-                </Link>
+                {isAuthenticated ? (
+                  <>
+                    <div className="text-gray-700 py-1 md:py-2 px-2 md:px-4 text-sm md:text-base flex items-center">
+                      <User className="h-4 w-4 mr-2" />
+                      {user?.firstName} {user?.lastName}
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="text-government-blue hover:text-agricultural-green transition-colors duration-200 py-1 md:py-2 px-2 md:px-4 rounded-md hover:bg-gray-50 block text-sm md:text-base flex items-center w-full text-left"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className="text-government-blue hover:text-agricultural-green transition-colors duration-200 py-1 md:py-2 px-2 md:px-4 rounded-md hover:bg-gray-50 block text-sm md:text-base flex items-center"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <LogIn className="h-4 w-4 mr-2" />
+                      Login
+                    </Link>
+                    <Link
+                      to="/signup"
+                      className="text-government-blue hover:text-agricultural-green transition-colors duration-200 py-1 md:py-2 px-2 md:px-4 rounded-md hover:bg-gray-50 block text-sm md:text-base flex items-center"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Sign Up
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </nav>

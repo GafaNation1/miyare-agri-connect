@@ -8,21 +8,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Mail, Shield, ArrowLeft, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const { toast } = useToast();
+  const { forgotPassword, isLoading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
     try {
-      // Here you would typically send a password reset email
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await forgotPassword(email);
       setEmailSent(true);
       toast({
         title: "Reset Email Sent",
@@ -34,8 +32,6 @@ const ForgotPassword = () => {
         description: "Failed to send reset email. Please try again.",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -112,7 +108,7 @@ const ForgotPassword = () => {
                       We've sent password reset instructions to <strong>{email}</strong>
                     </p>
                     <p className="text-xs text-gray-500">
-                      Please check your inbox and spam folder. The link will expire in 24 hours.
+                      Please check your inbox and spam folder. Our team will send you a secure reset link.
                     </p>
                   </div>
                   
@@ -156,7 +152,7 @@ const ForgotPassword = () => {
               <Alert className="mt-4 border-agricultural-green/20 bg-agricultural-green/5">
                 <Shield className="h-4 w-4 text-agricultural-green" />
                 <AlertDescription className="text-sm text-gray-600">
-                  For security purposes, password reset links are valid for 24 hours only.
+                  For security purposes, password reset requests are processed manually by our admin team.
                 </AlertDescription>
               </Alert>
             </CardContent>
