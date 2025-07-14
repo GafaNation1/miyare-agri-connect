@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Phone, Mail, ChevronDown, MoreHorizontal } from 'lucide-react';
+import { Menu, X, Phone, Mail, ChevronDown, MoreHorizontal, LogIn, UserPlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
   DropdownMenu,
@@ -44,21 +44,45 @@ const Header = () => {
 
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
-      {/* Top bar with contact info - hidden on mobile */}
-      <div className="bg-government-blue text-white py-1 md:py-2 hidden sm:block">
+      {/* Top bar with contact info and auth buttons */}
+      <div className="bg-government-blue text-white py-1 md:py-2">
         <div className="container mx-auto px-4 flex justify-between items-center text-xs md:text-sm">
           <div className="flex items-center space-x-2 md:space-x-4">
             <div className="flex items-center space-x-1">
               <Phone className="h-3 w-3 md:h-4 md:w-4" />
-              <span>+254 XXX XXX XXX</span>
+              <span className="hidden sm:inline">+254 XXX XXX XXX</span>
             </div>
             <div className="flex items-center space-x-1">
               <Mail className="h-3 w-3 md:h-4 md:w-4" />
-              <span>info@miyareagri.migori.go.ke</span>
+              <span className="hidden sm:inline">info@miyareagri.migori.go.ke</span>
             </div>
           </div>
-          <div className="hidden md:block">
-            <span>Department of Agriculture - Migori County Government</span>
+          
+          {/* Auth buttons */}
+          <div className="flex items-center space-x-2">
+            <span className="hidden lg:block text-xs">Department of Agriculture - Migori County Government</span>
+            <div className="flex items-center space-x-1 md:space-x-2 ml-2 md:ml-4">
+              <Link to="/login">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-white hover:bg-white/10 text-xs md:text-sm h-6 md:h-8 px-2 md:px-3"
+                >
+                  <LogIn className="h-3 w-3 md:h-4 md:w-4 mr-1" />
+                  Login
+                </Button>
+              </Link>
+              <Link to="/signup">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-white hover:bg-white/10 text-xs md:text-sm h-6 md:h-8 px-2 md:px-3"
+                >
+                  <UserPlus className="h-3 w-3 md:h-4 md:w-4 mr-1" />
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -115,6 +139,19 @@ const Header = () => {
                     )}
                   </React.Fragment>
                 ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/login" className="cursor-pointer flex items-center">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Login
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/signup" className="cursor-pointer flex items-center">
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Sign Up
+                  </Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -159,6 +196,26 @@ const Header = () => {
                   )}
                 </div>
               ))}
+              
+              {/* Mobile Auth Links */}
+              <div className="border-t border-gray-200 pt-2 mt-2">
+                <Link
+                  to="/login"
+                  className="text-government-blue hover:text-agricultural-green transition-colors duration-200 py-1 md:py-2 px-2 md:px-4 rounded-md hover:bg-gray-50 block text-sm md:text-base flex items-center"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="text-government-blue hover:text-agricultural-green transition-colors duration-200 py-1 md:py-2 px-2 md:px-4 rounded-md hover:bg-gray-50 block text-sm md:text-base flex items-center"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Sign Up
+                </Link>
+              </div>
             </div>
           </nav>
         )}
