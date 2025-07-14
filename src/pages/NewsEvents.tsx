@@ -108,13 +108,15 @@ const NewsEvents = () => {
   ];
 
   const filteredEvents = upcomingEvents.filter(event => {
-    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         event.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || event.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const handleRegistration = () => {
-    window.open('https://forms.google.com/d/e/1FAIpQLSc_event_registration_form', '_blank');
+  const handleSearch = () => {
+    // Search functionality is already live via filteredEvents
+    console.log('Searching for:', searchTerm);
   };
 
   return (
@@ -146,13 +148,20 @@ const NewsEvents = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
+                <Button 
+                  onClick={handleSearch}
+                  className="absolute right-2 top-1 h-8 px-3 bg-agricultural-green hover:bg-green-700"
+                  size="sm"
+                >
+                  Search
+                </Button>
               </div>
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4 text-gray-500" />
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="px-4 py-2 border rounded-md"
+                  className="px-4 py-2 border rounded-md bg-white"
                 >
                   {categories.map(category => (
                     <option key={category.value} value={category.value}>
@@ -181,6 +190,9 @@ const NewsEvents = () => {
                     <Badge className="absolute top-4 left-4 bg-agricultural-green text-white">
                       {event.type}
                     </Badge>
+                    <Badge className="absolute top-4 right-4 bg-blue-500 text-white">
+                      {categories.find(cat => cat.value === event.category)?.label || event.category}
+                    </Badge>
                   </div>
                   <CardHeader>
                     <div className="flex justify-between items-start mb-2">
@@ -204,12 +216,11 @@ const NewsEvents = () => {
                         {event.participants} seats
                       </div>
                     </div>
-                    <Button 
-                      className="w-full bg-agricultural-green hover:bg-green-700"
-                      onClick={handleRegistration}
-                    >
-                      Register Now <ExternalLink className="h-4 w-4 ml-2" />
-                    </Button>
+                    <Link to="/event-registration">
+                      <Button className="w-full bg-agricultural-green hover:bg-green-700">
+                        Register Now <ExternalLink className="h-4 w-4 ml-2" />
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               ))}

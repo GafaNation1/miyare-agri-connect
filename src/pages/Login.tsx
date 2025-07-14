@@ -71,6 +71,7 @@ const Login: React.FC<LoginProps> = ({ isEmbedded = false }) => {
               onChange={handleInputChange}
               className="pl-10"
               required
+              autoComplete="email"
             />
           </div>
         </div>
@@ -90,6 +91,7 @@ const Login: React.FC<LoginProps> = ({ isEmbedded = false }) => {
               onChange={handleInputChange}
               className="pl-10 pr-10"
               required
+              autoComplete="current-password"
             />
             <button
               type="button"
@@ -165,6 +167,7 @@ const Login: React.FC<LoginProps> = ({ isEmbedded = false }) => {
                       onChange={handleInputChange}
                       className="pl-10"
                       required
+                      autoComplete="email"
                     />
                   </div>
                 </div>
@@ -184,6 +187,7 @@ const Login: React.FC<LoginProps> = ({ isEmbedded = false }) => {
                       onChange={handleInputChange}
                       className="pl-10 pr-10"
                       required
+                      autoComplete="current-password"
                     />
                     <button
                       type="button"

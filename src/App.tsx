@@ -31,6 +31,12 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import NotFound from "./pages/NotFound";
+import EnrollmentPage from "./pages/EnrollmentPage";
+import EventRegistrationPage from "./pages/EventRegistrationPage";
+import CourseBrochuresPage from "./pages/CourseBrochuresPage";
+import ApplicationFormsPage from "./pages/ApplicationFormsPage";
+import TrainingManualsPage from "./pages/TrainingManualsPage";
+import ResearchPublicationsPage from "./pages/ResearchPublicationsPage";
 
 const queryClient = new QueryClient();
 
@@ -69,6 +75,17 @@ const App = () => (
             <Route path="/accessibility" element={<ProtectedRoute><AccessibilityStatement /></ProtectedRoute>} />
             <Route path="/cookies" element={<ProtectedRoute><CookiePolicy /></ProtectedRoute>} />
             <Route path="/map" element={<ProtectedRoute><MapView /></ProtectedRoute>} />
+            
+            {/* New enrollment and registration routes */}
+            <Route path="/enrollment" element={<ProtectedRoute><EnrollmentPage /></ProtectedRoute>} />
+            <Route path="/event-registration" element={<ProtectedRoute><EventRegistrationPage /></ProtectedRoute>} />
+            <Route path="/event-registration/:eventId" element={<ProtectedRoute><EventRegistrationPage /></ProtectedRoute>} />
+            
+            {/* New resource pages */}
+            <Route path="/resources/brochures" element={<ProtectedRoute><CourseBrochuresPage /></ProtectedRoute>} />
+            <Route path="/resources/forms" element={<ProtectedRoute><ApplicationFormsPage /></ProtectedRoute>} />
+            <Route path="/resources/manuals" element={<ProtectedRoute><TrainingManualsPage /></ProtectedRoute>} />
+            <Route path="/resources/research" element={<ProtectedRoute><ResearchPublicationsPage /></ProtectedRoute>} />
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<ProtectedRoute><NotFound /></ProtectedRoute>} />

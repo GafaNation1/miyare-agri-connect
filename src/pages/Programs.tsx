@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Users, Award, Download, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Programs = () => {
   const programs = [
@@ -78,10 +79,6 @@ const Programs = () => {
     { program: "Agricultural Entrepreneurship", startDate: "March 5, 2024", status: "Open" }
   ];
 
-  const handleRegistration = (programTitle: string) => {
-    window.open('https://forms.google.com/d/e/1FAIpQLSc_registration_form_link', '_blank');
-  };
-
   const handleDownloadBrochure = () => {
     // This would normally download a PDF brochure
     alert('Brochure download will be available soon. Please contact us for more information.');
@@ -149,12 +146,11 @@ const Programs = () => {
                     </div>
 
                     <div className="flex flex-col space-y-2">
-                      <Button 
-                        className="w-full bg-agricultural-green hover:bg-green-700"
-                        onClick={() => handleRegistration(program.title)}
-                      >
-                        Register Now <ExternalLink className="h-4 w-4 ml-2" />
-                      </Button>
+                      <Link to="/enrollment">
+                        <Button className="w-full bg-agricultural-green hover:bg-green-700">
+                          Enroll Now <ExternalLink className="h-4 w-4 ml-2" />
+                        </Button>
+                      </Link>
                       <Button variant="outline" size="sm" onClick={handleDownloadBrochure}>
                         <Download className="h-4 w-4 mr-2" />
                         Download Brochure
@@ -181,9 +177,11 @@ const Programs = () => {
                           <Badge variant={session.status === 'Open' ? 'default' : 'secondary'}>
                             {session.status}
                           </Badge>
-                          <Button size="sm" onClick={() => handleRegistration(session.program)}>
-                            Register
-                          </Button>
+                          <Link to="/enrollment">
+                            <Button size="sm">
+                              Register
+                            </Button>
+                          </Link>
                         </div>
                       </div>
                     ))}

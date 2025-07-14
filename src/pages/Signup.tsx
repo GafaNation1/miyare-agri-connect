@@ -107,6 +107,7 @@ const Signup: React.FC<SignupProps> = ({ isEmbedded = false }) => {
               onChange={handleInputChange}
               className="pl-10"
               required
+              autoComplete="given-name"
             />
           </div>
         </div>
@@ -126,6 +127,7 @@ const Signup: React.FC<SignupProps> = ({ isEmbedded = false }) => {
               onChange={handleInputChange}
               className="pl-10"
               required
+              autoComplete="family-name"
             />
           </div>
         </div>
@@ -147,6 +149,7 @@ const Signup: React.FC<SignupProps> = ({ isEmbedded = false }) => {
             onChange={handleInputChange}
             className="pl-10"
             required
+            autoComplete="email"
           />
         </div>
       </div>
@@ -167,6 +170,7 @@ const Signup: React.FC<SignupProps> = ({ isEmbedded = false }) => {
             onChange={handleInputChange}
             className="pl-10 pr-10"
             required
+            autoComplete="new-password"
           />
           <button
             type="button"
@@ -193,6 +197,7 @@ const Signup: React.FC<SignupProps> = ({ isEmbedded = false }) => {
             onChange={handleInputChange}
             className="pl-10 pr-10"
             required
+            autoComplete="new-password"
           />
           <button
             type="button"
