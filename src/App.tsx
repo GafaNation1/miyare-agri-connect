@@ -25,6 +25,9 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import AccessibilityStatement from "./pages/AccessibilityStatement";
 import CookiePolicy from "./pages/CookiePolicy";
 import MapView from "./pages/MapView";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/ForgotPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +55,9 @@ const App = () => (
           <Route path="/news-events" element={<NewsEvents />} />
           <Route path="/news/:id" element={<NewsArticle />} />
           <Route path="/administration" element={<Administration />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/terms" element={<TermsOfUse />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/accessibility" element={<AccessibilityStatement />} />
