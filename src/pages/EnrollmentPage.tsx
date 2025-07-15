@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,43 +9,140 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, GraduationCap, User, Mail, Phone, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 const EnrollmentPage = () => {
+  const [searchParams] = useSearchParams();
+  const [programs, setPrograms] = useState<any[]>([]);
+  const [selectedProgram, setSelectedProgram] = useState('');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
-    program: '',
     experience: '',
     motivation: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
-  const programs = [
-    'Certificate in Crop Production',
-    'Diploma in Agricultural Technology',
-    'Modern Dairy Farming Course',
-    'Poultry Production & Management',
-    'Sustainable Horticulture',
-    'Agricultural Entrepreneurship'
-  ];
+  useEffect(() => {
+    fetchPrograms();
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
+      }));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const programFromUrl = searchParams.get('program');
+    if (programFromUrl) {
+      setSelectedProgram(programFromUrl);
+    }
+  }, [searchParams]);
+
+  const fetchPrograms = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('training_programs')
+        .select('*')
+        .eq('status', 'active')
+        .order('title');
+
+      if (error) throw error;
+      setPrograms(data || []);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to load training programs",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Enrollment Submitted",
-      description: "Your enrollment application has been submitted successfully. We'll contact you soon!",
-    });
+    
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to enroll in programs",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!selectedProgram) {
+      toast({
+        title: "Program Required",
+        description: "Please select a training program",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase
+        .from('enrollments')
+        .insert({
+          user_id: user.id,
+          program_id: selectedProgram,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          experience: formData.experience,
+          motivation: formData.motivation
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Enrollment Submitted",
+        description: "Your enrollment application has been submitted successfully!",
+      });
+
+      // Reset form
+      setFormData({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: '',
+        experience: '',
+        motivation: ''
+      });
+      setSelectedProgram('');
+
+    } catch (error: any) {
+      if (error.code === '23505') {
+        toast({
+          title: "Already Enrolled",
+          description: "You are already enrolled in this program",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Enrollment Failed",
+          description: error.message || "Failed to submit enrollment",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -144,14 +241,14 @@ const EnrollmentPage = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="program">Select Program</Label>
-                  <Select onValueChange={(value) => handleSelectChange('program', value)}>
+                  <Select value={selectedProgram} onValueChange={setSelectedProgram}>
                     <SelectTrigger>
                       <SelectValue placeholder="Choose a training program" />
                     </SelectTrigger>
                     <SelectContent>
                       {programs.map((program) => (
-                        <SelectItem key={program} value={program}>
-                          {program}
+                        <SelectItem key={program.id} value={program.id}>
+                          {program.title} - {program.duration} - KSH {program.price}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -188,8 +285,9 @@ const EnrollmentPage = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-agricultural-green hover:bg-green-700 text-white"
+                  disabled={isSubmitting}
                 >
-                  Submit Enrollment Application
+                  {isSubmitting ? "Submitting..." : "Submit Enrollment Application"}
                 </Button>
               </form>
             </CardContent>

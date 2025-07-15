@@ -14,7 +14,304 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_messages: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          message: string
+          name: string
+          status: string | null
+          subject: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          message: string
+          name: string
+          status?: string | null
+          subject: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          status?: string | null
+          subject?: string
+        }
+        Relationships: []
+      }
+      enrollments: {
+        Row: {
+          email: string
+          enrolled_at: string | null
+          experience: string | null
+          first_name: string
+          id: string
+          last_name: string
+          motivation: string | null
+          phone: string
+          program_id: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          email: string
+          enrolled_at?: string | null
+          experience?: string | null
+          first_name: string
+          id?: string
+          last_name: string
+          motivation?: string | null
+          phone: string
+          program_id: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          email?: string
+          enrolled_at?: string | null
+          experience?: string | null
+          first_name?: string
+          id?: string
+          last_name?: string
+          motivation?: string | null
+          phone?: string
+          program_id?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enrollments_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "training_programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_registrations: {
+        Row: {
+          dietary_requirements: string | null
+          email: string
+          event_id: string
+          expectations: string | null
+          first_name: string
+          id: string
+          last_name: string
+          organization: string | null
+          phone: string
+          position: string | null
+          registered_at: string | null
+          user_id: string
+        }
+        Insert: {
+          dietary_requirements?: string | null
+          email: string
+          event_id: string
+          expectations?: string | null
+          first_name: string
+          id?: string
+          last_name: string
+          organization?: string | null
+          phone: string
+          position?: string | null
+          registered_at?: string | null
+          user_id: string
+        }
+        Update: {
+          dietary_requirements?: string | null
+          email?: string
+          event_id?: string
+          expectations?: string | null
+          first_name?: string
+          id?: string
+          last_name?: string
+          organization?: string | null
+          phone?: string
+          position?: string | null
+          registered_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          end_time: string | null
+          event_date: string
+          event_type: string | null
+          id: string
+          location: string | null
+          max_participants: number | null
+          start_time: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          end_time?: string | null
+          event_date: string
+          event_type?: string | null
+          id?: string
+          location?: string | null
+          max_participants?: number | null
+          start_time?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          end_time?: string | null
+          event_date?: string
+          event_type?: string | null
+          id?: string
+          location?: string | null
+          max_participants?: number | null
+          start_time?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      news_articles: {
+        Row: {
+          author: string | null
+          content: string
+          created_at: string | null
+          excerpt: string | null
+          featured_image_url: string | null
+          id: string
+          published_at: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author?: string | null
+          content: string
+          created_at?: string | null
+          excerpt?: string | null
+          featured_image_url?: string | null
+          id?: string
+          published_at?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string | null
+          content?: string
+          created_at?: string | null
+          excerpt?: string | null
+          featured_image_url?: string | null
+          id?: string
+          published_at?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          county: string | null
+          created_at: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          occupation: string | null
+          phone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          county?: string | null
+          created_at?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          occupation?: string | null
+          phone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          county?: string | null
+          created_at?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          occupation?: string | null
+          phone?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      training_programs: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          duration: string | null
+          end_date: string | null
+          id: string
+          level: string | null
+          max_participants: number | null
+          prerequisites: string | null
+          price: number | null
+          start_date: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          duration?: string | null
+          end_date?: string | null
+          id?: string
+          level?: string | null
+          max_participants?: number | null
+          prerequisites?: string | null
+          price?: number | null
+          start_date?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          duration?: string | null
+          end_date?: string | null
+          id?: string
+          level?: string | null
+          max_participants?: number | null
+          prerequisites?: string | null
+          price?: number | null
+          start_date?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -1,7 +1,10 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import type { User } from '@supabase/supabase-js';
+import { useToast } from '@/hooks/use-toast';
 
-interface User {
+interface AuthUser {
   id: string;
   email: string;
   firstName: string;
@@ -9,7 +12,7 @@ interface User {
 }
 
 interface AuthContextType {
-  user: User | null;
+  user: AuthUser | null;
   login: (email: string, password: string) => Promise<void>;
   signup: (userData: any) => Promise<void>;
   logout: () => void;
@@ -29,34 +32,64 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
-    // Check if user is stored in localStorage on app start
-    const storedUser = localStorage.getItem('miyare_user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        setUserFromSession(session.user);
+      }
+      setIsLoading(false);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session?.user) {
+          setUserFromSession(session.user);
+        } else {
+          setUser(null);
+        }
+        setIsLoading(false);
+      }
+    );
+
+    return () => subscription.unsubscribe();
   }, []);
+
+  const setUserFromSession = (supabaseUser: User) => {
+    setUser({
+      id: supabaseUser.id,
+      email: supabaseUser.email || '',
+      firstName: supabaseUser.user_metadata?.first_name || supabaseUser.email?.split('@')[0] || '',
+      lastName: supabaseUser.user_metadata?.last_name || ''
+    });
+  };
 
   const login = async (email: string, password: string): Promise<void> => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock user data - in real app, this would come from your backend
-      const userData: User = {
-        id: '1',
+      const { error } = await supabase.auth.signInWithPassword({
         email,
-        firstName: email.split('@')[0],
-        lastName: 'User'
-      };
-      
-      setUser(userData);
-      localStorage.setItem('miyare_user', JSON.stringify(userData));
+        password,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Welcome back!",
+        description: "You have successfully logged in.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Login Failed",
+        description: error.message || "Invalid email or password",
+        variant: "destructive",
+      });
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -65,49 +98,63 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signup = async (userData: any): Promise<void> => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      const newUser: User = {
-        id: Date.now().toString(),
+      const { error } = await supabase.auth.signUp({
         email: userData.email,
-        firstName: userData.firstName,
-        lastName: userData.lastName
-      };
-      
-      setUser(newUser);
-      localStorage.setItem('miyare_user', JSON.stringify(newUser));
+        password: userData.password,
+        options: {
+          data: {
+            first_name: userData.firstName,
+            last_name: userData.lastName,
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Account Created",
+        description: "Please check your email to verify your account.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Signup Failed",
+        description: error.message || "Failed to create account",
+        variant: "destructive",
+      });
+      throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await supabase.auth.signOut();
     setUser(null);
-    localStorage.removeItem('miyare_user');
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
   };
 
   const forgotPassword = async (email: string): Promise<void> => {
-    // Simulate sending password reset email
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Send email via Formspree
-    const response = await fetch('https://formspree.io/f/xanjvaza', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        subject: 'Password Reset Request',
-        message: `Password reset requested for: ${email}. Please provide a secure reset link to this user.`,
-        type: 'password_reset'
-      }),
-    });
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
 
-    if (!response.ok) {
-      throw new Error('Failed to send password reset email');
+      if (error) throw error;
+
+      toast({
+        title: "Password Reset",
+        description: "Check your email for password reset instructions.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Reset Failed",
+        description: error.message || "Failed to send reset email",
+        variant: "destructive",
+      });
+      throw error;
     }
   };
 

@@ -5,10 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Eye, EyeOff, Lock, Mail, Shield, User, Phone } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, Shield, User } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -21,9 +19,6 @@ const Signup: React.FC<SignupProps> = ({ isEmbedded = false }) => {
     firstName: '',
     lastName: '',
     email: '',
-    phone: '',
-    county: '',
-    occupation: '',
     password: '',
     confirmPassword: '',
     agreeToTerms: false
@@ -39,13 +34,6 @@ const Signup: React.FC<SignupProps> = ({ isEmbedded = false }) => {
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
     }));
   };
 
@@ -72,25 +60,16 @@ const Signup: React.FC<SignupProps> = ({ isEmbedded = false }) => {
 
     try {
       await signup(formData);
-      toast({
-        title: "Account Created Successfully",
-        description: "Welcome to Miyare Agricultural Training Center!",
-      });
       if (!isEmbedded) {
         navigate('/');
       }
     } catch (error) {
-      toast({
-        title: "Registration Failed",
-        description: "An error occurred during registration. Please try again.",
-        variant: "destructive",
-      });
+      // Error handling is done in the signup function
     }
   };
 
   const FormContent = () => (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Personal Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
@@ -133,7 +112,6 @@ const Signup: React.FC<SignupProps> = ({ isEmbedded = false }) => {
         </div>
       </div>
 
-      {/* Contact Information */}
       <div className="space-y-2">
         <Label htmlFor="email" className="text-sm font-medium text-gray-700">
           Email Address
@@ -154,7 +132,6 @@ const Signup: React.FC<SignupProps> = ({ isEmbedded = false }) => {
         </div>
       </div>
 
-      {/* Password */}
       <div className="space-y-2">
         <Label htmlFor="password" className="text-sm font-medium text-gray-700">
           Password
@@ -209,7 +186,6 @@ const Signup: React.FC<SignupProps> = ({ isEmbedded = false }) => {
         </div>
       </div>
 
-      {/* Terms and Conditions */}
       <div className="flex items-start space-x-2">
         <Checkbox
           id="agreeToTerms"
@@ -240,7 +216,6 @@ const Signup: React.FC<SignupProps> = ({ isEmbedded = false }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-government-blue/5 via-earth-tone to-agricultural-green/5">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="flex justify-center items-center space-x-4 mb-4">
             <div className="w-16 h-16 bg-agricultural-green rounded-full flex items-center justify-center">

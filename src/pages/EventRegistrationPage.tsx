@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,9 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, Calendar, User, Mail, Phone, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 const EventRegistrationPage = () => {
   const { eventId } = useParams();
+  const [events, setEvents] = useState<any[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState('');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -22,23 +26,128 @@ const EventRegistrationPage = () => {
     dietaryRequirements: '',
     expectations: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    fetchEvents();
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
+      }));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (eventId) {
+      setSelectedEvent(eventId);
+    }
+  }, [eventId]);
+
+  const fetchEvents = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('status', 'upcoming')
+        .order('event_date');
+
+      if (error) throw error;
+      setEvents(data || []);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to load events",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Registration Successful",
-      description: "You have been registered for the event. Check your email for confirmation details!",
-    });
+    
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to register for events",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!selectedEvent) {
+      toast({
+        title: "Event Required",
+        description: "Please select an event",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase
+        .from('event_registrations')
+        .insert({
+          user_id: user.id,
+          event_id: selectedEvent,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          organization: formData.organization,
+          position: formData.position,
+          dietary_requirements: formData.dietaryRequirements,
+          expectations: formData.expectations
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Registration Successful",
+        description: "You have been registered for the event successfully!",
+      });
+
+      // Reset form
+      setFormData({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: '',
+        organization: '',
+        position: '',
+        dietaryRequirements: '',
+        expectations: ''
+      });
+      setSelectedEvent('');
+
+    } catch (error: any) {
+      if (error.code === '23505') {
+        toast({
+          title: "Already Registered",
+          description: "You are already registered for this event",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Registration Failed",
+          description: error.message || "Failed to register for event",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -136,6 +245,22 @@ const EventRegistrationPage = () => {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="event">Select Event</Label>
+                  <Select value={selectedEvent} onValueChange={setSelectedEvent}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose an event" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {events.map((event) => (
+                        <SelectItem key={event.id} value={event.id}>
+                          {event.title} - {new Date(event.event_date).toLocaleDateString()}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="organization">Organization/Farm</Label>
                   <div className="relative">
                     <Users className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
@@ -153,7 +278,7 @@ const EventRegistrationPage = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="position">Position/Role</Label>
-                  <Select onValueChange={(value) => handleSelectChange('position', value)}>
+                  <Select value={formData.position} onValueChange={(value) => setFormData(prev => ({ ...prev, position: value }))}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select your role" />
                     </SelectTrigger>
@@ -195,8 +320,9 @@ const EventRegistrationPage = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-agricultural-green hover:bg-green-700 text-white"
+                  disabled={isSubmitting}
                 >
-                  Complete Registration
+                  {isSubmitting ? "Registering..." : "Complete Registration"}
                 </Button>
               </form>
             </CardContent>
