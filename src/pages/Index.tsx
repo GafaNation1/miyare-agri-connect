@@ -10,8 +10,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Users, Award, TrendingUp, MapPin, Calendar, Clock, ArrowRight, Play } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Index = () => {
+  const navigate = useNavigate();
+
   const quickStats = [
     { icon: Users, number: "5,000+", label: "Farmers Trained", color: "bg-blue-500" },
     { icon: Award, number: "50+", label: "Programs Offered", color: "bg-green-500" },
@@ -64,8 +67,12 @@ const Index = () => {
     window.open('https://www.youtube.com/watch?v=sample_video', '_blank');
   };
 
-  const handleRegistration = () => {
-    window.open('https://forms.google.com/d/e/1FAIpQLSc_general_registration', '_blank');
+  const handleProgramEnrollment = () => {
+    navigate('/enrollment');
+  };
+
+  const handleEventRegistration = () => {
+    navigate('/event-registration');
   };
 
   return (
@@ -127,7 +134,7 @@ const Index = () => {
                     </div>
                     <Button 
                       className="w-full bg-agricultural-green hover:bg-green-700 group"
-                      onClick={handleRegistration}
+                      onClick={handleProgramEnrollment}
                     >
                       Enroll Now
                       <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -186,7 +193,7 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 className="mt-4 lg:mt-0"
-                onClick={() => window.location.href = '/news-events'}
+                onClick={() => navigate('/news-events')}
               >
                 View All Events
                 <ArrowRight className="h-4 w-4 ml-2" />
@@ -219,6 +226,13 @@ const Index = () => {
                             {event.location}
                           </div>
                         </div>
+                        <Button 
+                          size="sm" 
+                          className="mt-3 bg-agricultural-green hover:bg-green-700"
+                          onClick={handleEventRegistration}
+                        >
+                          Register Now
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -245,7 +259,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold"
-                  onClick={handleRegistration}
+                  onClick={handleProgramEnrollment}
                 >
                   Register for Training
                 </Button>
@@ -253,7 +267,7 @@ const Index = () => {
                   size="lg" 
                   variant="outline" 
                   className="border-white text-white hover:bg-white hover:text-agricultural-green"
-                  onClick={() => window.location.href = '/contact'}
+                  onClick={() => navigate('/contact')}
                 >
                   Contact Us
                 </Button>
